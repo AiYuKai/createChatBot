@@ -1,5 +1,6 @@
 # 以下を「app.py」に書き込み
 import streamlit as st
+import streamlit_authenticator as stauth
 import openai
 
 # APIキーの設定
@@ -9,7 +10,17 @@ openai.api_key = st.secrets.OpenAIAPI.openai_api_key
 # modelの設定
 model="gpt-3.5-turbo-1106"
 
+#########################################################
+# ユーザ情報
+username = ["yuu"]
+passwords = ["testabc"]
 
+# パスワードをハッシュ化
+hashed_pasword = stauth.Hasher(passwords).generate()
+# cookie_expiry_daysでクッキーの有効期限を設定可能。認証情報の保持期間を設定でき値を0とするとアクセス毎に認証を要求する
+authenticator = stauth.Authenticate(username, hashed_pasword,
+    'some_cookie_name', 'some_signature_key', cookie_expiry_days=1)
+#########################################################
 
 # st.session_stateを使いメッセージのやりとりを保存
 if "messages" not in st.session_state:
@@ -40,19 +51,36 @@ def communicate() -> openai.types.chat.chat_completion.ChatCompletion:
     return messages
 
 # ユーザーインターフェイスの構築
-st.title("My AI Assistant")
-st.write("ChatGPT APIを使ったチャットボットです。")
+########### mainチャットページ関数 ##########
+def main_page(userName):
+  st.write('ようこそ *%s*' % (userName))
+  st.title("My AI Assistant")
+  st.write("ChatGPT APIを使ったチャットボットです。")
 
-user_input = st.text_input("メッセージを入力してください。", key="user_input", on_change=communicate)
+  user_input = st.text_input("メッセージを入力してください。", key="user_input", on_change=communicate)
 
-if st.session_state["messages"]:
-    messages = st.session_state["messages"]
+  if st.session_state["messages"]:
+      messages = st.session_state["messages"]
 
-    for message in reversed(messages[1:]):  # 直近のメッセージを上に
-        if message["role"]=="user":
-          speaker = "🙂"
-        elif message["role"]=="assistant":
-          speaker="🤖"
+      for message in reversed(messages[1:]):  # 直近のメッセージを上に
+          if message["role"]=="user":
+            speaker = "🙂"
+          elif message["role"]=="assistant":
+            speaker="🤖"
 
-        # 出力する
-        st.write(speaker + ": " + message["content"])
+          # 出力する
+          st.write(speaker + ": " + message["content"])
+
+########## ユーザーログインページ ##########
+# ログインメソッドで入力フォームを配置
+name, authentication_status, username = authenticator.login('Login', 'main')
+# 返り値、authentication_statusの状態で処理を場合分け
+if authentication_status:
+   userName = st.session_state['name']
+   main_page(userName)
+   # logoutメソッドでauthenciationの値をnoneにする
+   authenticator.logout("Logout","main")
+elif authentication_status == False:
+    st.error('Username/password is incorrect')
+elif authentication_status == None:
+    st.warning('Please enter your username and password')
