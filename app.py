@@ -1,5 +1,6 @@
 # 以下を「app.py」に書き込み
 import streamlit as st
+import streamlit_authenticator as stauth
 import openai
 
 # APIキーの設定
@@ -8,23 +9,6 @@ openai.api_key = st.secrets.OpenAIAPI.openai_api_key
 
 # modelの設定
 model="gpt-3.5-turbo-1106"
-
-########################
-import streamlit_authenticator as stauth
-
-# ユーザ情報。引数
-names = ['John Smith', 'Rebecca Briggs']  # 
-usernames = ['jsmith', 'rbriggs']  # 入力フォームに入力された値と合致するか確認される
-passwords = ['123', '456']  # 入力フォームに入力された値と合致するか確認される
-
-# パスワードをハッシュ化。 リスト等、イテラブルなオブジェクトである必要がある
-hashed_passwords = stauth.Hasher(passwords).generate()
-
-# cookie_expiry_daysでクッキーの有効期限を設定可能。認証情報の保持期間を設定でき値を0とするとアクセス毎に認証を要求する
-authenticator = stauth.Authenticate(names, usernames, hashed_passwords,
-    'some_cookie_name', 'some_signature_key', cookie_expiry_days=30)
-#######################
-
 
 # st.session_stateを使いメッセージのやりとりを保存
 if "messages" not in st.session_state:
@@ -55,19 +39,27 @@ def communicate() -> openai.types.chat.chat_completion.ChatCompletion:
     return messages
 
 # ユーザーインターフェイスの構築
-st.title("My AI Assistant")
-st.write("ChatGPT APIを使ったチャットボットです。")
-
-user_input = st.text_input("メッセージを入力してください。", key="user_input", on_change=communicate)
-
-if st.session_state["messages"]:
-    messages = st.session_state["messages"]
-
-    for message in reversed(messages[1:]):  # 直近のメッセージを上に
-        if message["role"]=="user":
-          speaker = "🙂"
-        elif message["role"]=="assistant":
-          speaker="🤖"
-
-        # 出力する
-        st.write(speaker + ": " + message["content"])
+def main_page(userName):
+    st.title("My AI Assistant")
+    st.write("ChatGPT APIを使ったチャットボットです。")
+    
+    user_input = st.text_input("メッセージを入力してください。", key="user_input", on_change=communicate)
+    
+    if st.session_state["messages"]:
+        messages = st.session_state["messages"]
+    
+        for message in reversed(messages[1:]):  # 直近のメッセージを上に
+            if message["role"]=="user":
+              speaker = "🙂"
+            elif message["role"]=="assistant":
+              speaker="🤖"
+    
+            # 出力する
+            st.write(speaker + ": " + message["content"])
+# streamlitページの構築
+password = st.text_input("パスワード", type="password")
+ 
+if password == st.secrets["password"]:
+    main_page()
+else:
+    st.error("アクセスが拒否されました。")
