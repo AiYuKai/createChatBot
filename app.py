@@ -58,7 +58,7 @@ def main_page(userName):
             st.write(speaker + ": " + message["content"])
 # streamlitページの構築
 password = st.text_input("パスワード", type="password")
-stLoginpass = st.secrets.loginpass.pass
+stLoginpass = st.secrets.loginpass.login_pass
 if password == stLoginpass:
     main_page()
 else:
