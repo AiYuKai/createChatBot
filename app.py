@@ -39,7 +39,7 @@ def communicate() -> openai.types.chat.chat_completion.ChatCompletion:
     return messages
 
 # ユーザーインターフェイスの構築
-def main_page(userName):
+def main_page():
     st.title("My AI Assistant")
     st.write("ChatGPT APIを使ったチャットボットです。")
     
