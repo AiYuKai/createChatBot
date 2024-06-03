@@ -58,8 +58,8 @@ def main_page(userName):
             st.write(speaker + ": " + message["content"])
 # streamlitページの構築
 password = st.text_input("パスワード", type="password")
-
-if password == st.secrets.LoginPassword.pass:
+stLoginpass = st.secrets.loginpass.pass
+if password == stLoginpass:
     main_page()
 else:
     st.error("アクセスが拒否されました。")
