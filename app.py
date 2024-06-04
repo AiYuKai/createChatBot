@@ -1,6 +1,6 @@
 # 以下を「app.py」に書き込み
 import streamlit as st
-import streamlit_authenticator as stauth
+import streamlit_authenticator as sa
 import openai
 
 # APIキーの設定
@@ -57,14 +57,15 @@ def main_page():
             # 出力する
             st.write(speaker + ": " + message["content"])
 # streamlitページの構築
-authenticator = stauth.Authenticate(
-    credentials="asd",
-    cookie_name="ass",
-    cookie_key="vvv",
+auth = sa.Authenticator(
+    SECRET_KEY,
+    token_url="/token",
+    token_ttl=3600,
+    password_hashing_method=sa.PasswordHashingMethod.BCRYPT,
 )
 
 ## UI 
-authenticator.login()
+auth.login()
 
 
 password = st.text_input("パスワード", type="password")
