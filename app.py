@@ -57,7 +57,17 @@ def main_page():
             # 出力する
             st.write(speaker + ": " + message["content"])
 # streamlitページの構築
-stauth.login("ログイン","main")
+authenticator = stauth.Authenticate(
+    credentials=config['credentials'],
+    cookie_name=config['cookie']['name'],
+    cookie_key=config['cookie']['key'],
+    cookie_expiry_days=config['cookie']['expiry_days'],
+)
+
+## UI 
+authenticator.login()
+
+
 password = st.text_input("パスワード", type="password")
 stLoginpass = st.secrets.LoginPassWord.login_pass
 st.write("パスワードを入力して下さい")
