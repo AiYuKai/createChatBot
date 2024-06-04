@@ -63,4 +63,4 @@ st.write("パスワードを入力して下さい")
 if password == stLoginpass:
     main_page()
 elif password != stLoginpass:
-    st.error("アクセスが拒否されました。")
+    st.write("アクセスが拒否されました。")
