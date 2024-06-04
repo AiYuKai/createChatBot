@@ -62,4 +62,4 @@ stLoginpass = st.secrets.LoginPassWord.login_pass
 if password == stLoginpass:
     main_page()
 elif password != stLoginpass:
-    st.error("アクセスが拒否されました。")
+    st.error("アアアアクセスが拒否されました。")
