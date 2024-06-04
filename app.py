@@ -59,9 +59,8 @@ def main_page():
 # streamlitページの構築
 password = st.text_input("パスワード", type="password")
 stLoginpass = st.secrets.LoginPassWord.login_pass
+st.write("パスワードを入力して下さい")
 if password == stLoginpass:
     main_page()
 elif password != stLoginpass:
     st.error("アクセスが拒否されました。")
-else:
-    st.error("あいうえお")
