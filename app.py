@@ -61,5 +61,5 @@ password = st.text_input("パスワード", type="password")
 stLoginpass = st.secrets.LoginPassWord.login_pass
 if password == stLoginpass:
     main_page()
-else:
+elif password != stLoginpass:
     st.error("アクセスが拒否されました。")
