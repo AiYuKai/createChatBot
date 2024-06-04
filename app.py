@@ -57,6 +57,7 @@ def main_page():
             # 出力する
             st.write(speaker + ": " + message["content"])
 # streamlitページの構築
+authenticator.login("ログイン","main")
 password = st.text_input("パスワード", type="password")
 stLoginpass = st.secrets.LoginPassWord.login_pass
 st.write("パスワードを入力して下さい")
