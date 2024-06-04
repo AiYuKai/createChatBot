@@ -58,7 +58,9 @@ def main_page():
             st.write(speaker + ": " + message["content"])
 # streamlitページの構築
 authenticator = stauth.Authenticate(
-    
+    credentials="asd",
+    cookie_name="ass",
+    cookie_key="vvv",
 )
 
 ## UI 
