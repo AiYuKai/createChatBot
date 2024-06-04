@@ -57,17 +57,6 @@ def main_page():
             # 出力する
             st.write(speaker + ": " + message["content"])
 # streamlitページの構築
-auth = sa.Authenticator(
-    SECRET_KEY,
-    token_url="/token",
-    token_ttl=3600,
-    password_hashing_method=sa.PasswordHashingMethod.BCRYPT,
-)
-
-## UI 
-auth.login()
-
-
 password = st.text_input("パスワード", type="password")
 stLoginpass = st.secrets.LoginPassWord.login_pass
 st.write("パスワードを入力して下さい")
