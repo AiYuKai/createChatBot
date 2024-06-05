@@ -40,6 +40,7 @@ def communicate() -> openai.types.chat.chat_completion.ChatCompletion:
 
 # ユーザーインターフェイスの構築
 def main_page():
+    st.image("料理.png")
     st.title("My AI Assistant")
     st.write("ChatGPT APIを使ったチャットボットです。")
     
